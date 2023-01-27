@@ -1,0 +1,32 @@
+version: '3.8'
+
+# networks:
+#   myproject:
+#     name: myproject
+#     driver: bridge
+
+services:
+  fastapi:
+    container_name : myproject
+    build: .
+    command: bash -c 'uvicorn app.main:app --host 0.0.0.0 --reload'
+    ports:
+      - 8005:8000
+    environment:
+      - DATABASE_URL=postgresql://postgres:root123@db:5432/demo
+    # depends_on:
+    #   - db
+
+  db:
+    container_name: psql_database
+    image: postgres
+    volumes: 
+      - ./POSTGRES_DATA:/var/lib/postgresql@15/data/
+    ports:
+      - 5432
+    environment: 
+      POSTGRES_DB : demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root123
+      
+
